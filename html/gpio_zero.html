@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using GPIO Zero &mdash; Dictel io1212</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/color.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/dictel_exported.svg"/>
+    <link rel="canonical" href="https://www.dictel.io/io1212/gpio_zero.html" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Using libgpiod" href="libgpiod.html" />
+    <link rel="prev" title="Setup" href="intro.html" />
+    <!--script async src="https://www.googletagmanager.com/gtag/js?id=G-EJG1VJMZER"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-EJG1VJMZER');
+    </script-->
+     
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html">
+            <img src="_static/dictel_v1.0_exported_white.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html#pinout">Pinout</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Using GPIO Zero</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-1-blink">Example 1: Blink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-2-using-ledboard">Example 2: Using LEDBoard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-3-naming-your-outputs">Example 3: Naming your outputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-4-using-inputs-with-button">Example 4: Using inputs with Button</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-5-using-inputs-with-buttonboard">Example 5: Using inputs with ButtonBoard</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="libgpiod.html">Using libgpiod</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pigpio.html">Using pigpio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pigpiod.html">Using pigpiod</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pigpiod_remote.html">Using pigpiod remotely</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Dictel io1212</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <!-- Dictel -->
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="using-gpio-zero">
+<h1>Using GPIO Zero<a class="headerlink" href="#using-gpio-zero" title="Permalink to this headline"></a></h1>
+<p>The following sections show a few basic ways to interface with Dictel’s io1212 using the <a class="reference external" href="https://gpiozero.readthedocs.io/en/stable/index.html">GPIO Zero</a> library in Python.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
+<p>As seen on GPIO Zero’s <a class="reference external" href="https://gpiozero.readthedocs.io/en/stable/installing.html#raspberry-pi">installation instructions</a>, GPIO Zero is available through the apt repositories of Ubuntu, Debian, and Raspberry Pi OS.</p>
+<p>Install it by running:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ubuntu@rpi:~$ sudo apt update
+ubuntu@rpi:~$ sudo apt install python3-gpiozero
+</pre></div>
+</div>
+<p>You can also install the package through Python’s <code class="docutils literal notranslate"><span class="pre">pip</span></code> command. If you choose to install GPIO Zero inside of a virtual environment, take into account any relevant <a class="reference external" href="https://gpiozero.readthedocs.io/en/stable/development.html">development notes</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ubuntu@rpi:~$  sudo pip3 install gpiozero
+</pre></div>
+</div>
+</section>
+<section id="example-1-blink">
+<h2>Example 1: Blink<a class="headerlink" href="#example-1-blink" title="Permalink to this headline"></a></h2>
+<p>This first example shows how to turn a single output on and off repeatedly using GPIO Zero’s <code class="docutils literal notranslate"><span class="pre">LED</span></code> class. The output uses relay #0 (connected in pin 4, as shown in <a class="reference internal" href="intro.html#pinout"><span class="std std-ref">Pinout</span></a>).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
+
+<span class="kn">from</span> <span class="nn">gpiozero</span> <span class="kn">import</span> <span class="n">LED</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+
+<span class="n">output</span> <span class="o">=</span> <span class="n">LED</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">output</span><span class="o">.</span><span class="n">on</span><span class="p">()</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">output</span><span class="o">.</span><span class="n">off</span><span class="p">()</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+ 
+</pre></div>
+</div>
+</section>
+<section id="example-2-using-ledboard">
+<h2>Example 2: Using LEDBoard<a class="headerlink" href="#example-2-using-ledboard" title="Permalink to this headline"></a></h2>
+<p>Expanding on the previous example, the <code class="docutils literal notranslate"><span class="pre">LEDBoard</span></code> class can be used to group several outputs together. This example sets up an LED Board with 12 outputs and blinks the first one.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
+
+<span class="kn">from</span> <span class="nn">gpiozero</span> <span class="kn">import</span> <span class="n">LEDBoard</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+
+<span class="n">outputs</span> <span class="o">=</span> <span class="n">LEDBoard</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">15</span><span class="p">)</span>
+
+<span class="n">outputs</span><span class="o">.</span><span class="n">off</span><span class="p">()</span>      <span class="c1"># turn off all outputs</span>
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">outputs</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">outputs</span><span class="o">.</span><span class="n">off</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</section>
+<section id="example-3-naming-your-outputs">
+<h2>Example 3: Naming your outputs<a class="headerlink" href="#example-3-naming-your-outputs" title="Permalink to this headline"></a></h2>
+<p>You can define module-level “constants” naming each of your outputs and later use them to index the LED Board array.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
+
+<span class="kn">from</span> <span class="nn">gpiozero</span> <span class="kn">import</span> <span class="n">LEDBoard</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+
+<span class="n">Output_1</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">Output_2</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">Output_3</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">Output_4</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">Output_5</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">Output_6</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">Output_7</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">Output_8</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="n">Output_9</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">Output_10</span> <span class="o">=</span> <span class="mi">9</span>
+<span class="n">Output_11</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">Output_12</span> <span class="o">=</span> <span class="mi">11</span>
+
+<span class="n">outputs</span> <span class="o">=</span> <span class="n">LEDBoard</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">15</span><span class="p">)</span>
+
+<span class="n">outputs</span><span class="o">.</span><span class="n">off</span><span class="p">()</span>      <span class="c1"># turn off all LEDs</span>
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">outputs</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">Output_1</span><span class="p">)</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">outputs</span><span class="o">.</span><span class="n">off</span><span class="p">(</span><span class="n">Output_1</span><span class="p">)</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</section>
+<section id="example-4-using-inputs-with-button">
+<h2>Example 4: Using inputs with Button<a class="headerlink" href="#example-4-using-inputs-with-button" title="Permalink to this headline"></a></h2>
+<p>Similarly, you can use the <code class="docutils literal notranslate"><span class="pre">Button</span></code> class to treat an input like a button. Remember to set the <code class="docutils literal notranslate"><span class="pre">pull_up</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
+
+<span class="kn">from</span> <span class="nn">gpiozero</span> <span class="kn">import</span> <span class="n">LEDBoard</span><span class="p">,</span> <span class="n">Button</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+
+<span class="n">Output_1</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">Output_2</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">Output_3</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">Output_4</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">Output_5</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">Output_6</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">Output_7</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">Output_8</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="n">Output_9</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">Output_10</span> <span class="o">=</span> <span class="mi">9</span>
+<span class="n">Output_11</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">Output_12</span> <span class="o">=</span> <span class="mi">11</span>
+
+<span class="n">outputs</span> <span class="o">=</span> <span class="n">LEDBoard</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">15</span><span class="p">)</span>
+
+<span class="n">Input_1</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="n">pull_up</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">bounce_time</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">Input_2</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="mi">17</span><span class="p">,</span><span class="n">pull_up</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">bounce_time</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">Input_3</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="n">pull_up</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">bounce_time</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">Input_4</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="mi">19</span><span class="p">,</span><span class="n">pull_up</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">bounce_time</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">Input_5</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="n">pull_up</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">bounce_time</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">Input_6</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="mi">21</span><span class="p">,</span><span class="n">pull_up</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">bounce_time</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">Input_7</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="mi">22</span><span class="p">,</span><span class="n">pull_up</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">bounce_time</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">Input_8</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="mi">23</span><span class="p">,</span><span class="n">pull_up</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">bounce_time</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">Input_9</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span><span class="n">pull_up</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">bounce_time</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">Input_10</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="n">pull_up</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">bounce_time</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">Input_11</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="n">pull_up</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">bounce_time</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">Input_12</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="mi">27</span><span class="p">,</span><span class="n">pull_up</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">bounce_time</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="n">outputs</span><span class="o">.</span><span class="n">off</span><span class="p">()</span>      <span class="c1"># turn off all LEDs</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">Input_1</span><span class="o">.</span><span class="n">is_pressed</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Input_1</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+<span class="n">Input_1</span><span class="o">.</span><span class="n">wait_for_press</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">Input_1</span><span class="o">.</span><span class="n">is_pressed</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Input_1</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">outputs</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">Output_1</span><span class="p">)</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">outputs</span><span class="o">.</span><span class="n">off</span><span class="p">(</span><span class="n">Output_1</span><span class="p">)</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</section>
+<section id="example-5-using-inputs-with-buttonboard">
+<h2>Example 5: Using inputs with ButtonBoard<a class="headerlink" href="#example-5-using-inputs-with-buttonboard" title="Permalink to this headline"></a></h2>
+<p>Like in the case of <code class="docutils literal notranslate"><span class="pre">LEDBoard</span></code>, you can use the <code class="docutils literal notranslate"><span class="pre">ButtonBoard</span></code> class to group all inputs, and then optionally assign names to each of them.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
+
+<span class="kn">from</span> <span class="nn">gpiozero</span> <span class="kn">import</span> <span class="n">LEDBoard</span><span class="p">,</span> <span class="n">ButtonBoard</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+
+<span class="n">Output_1</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">Output_2</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">Output_3</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">Output_4</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">Output_5</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">Output_6</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">Output_7</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">Output_8</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="n">Output_9</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">Output_10</span> <span class="o">=</span> <span class="mi">9</span>
+<span class="n">Output_11</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">Output_12</span> <span class="o">=</span> <span class="mi">11</span>
+
+<span class="n">Input_1</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">Input_2</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">Input_3</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">Input_4</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">Input_5</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">Input_6</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">Input_7</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">Input_8</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="n">Input_9</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">Input_10</span> <span class="o">=</span> <span class="mi">9</span>
+<span class="n">Input_11</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">Input_12</span> <span class="o">=</span> <span class="mi">11</span>
+
+<span class="n">outputs</span> <span class="o">=</span> <span class="n">LEDBoard</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">ButtonBoard</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">21</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">23</span><span class="p">,</span><span class="mi">24</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">26</span><span class="p">,</span><span class="mi">27</span><span class="p">,</span><span class="n">pull_up</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">outputs</span><span class="o">.</span><span class="n">off</span><span class="p">()</span>      <span class="c1"># turn off all LEDs</span>
+
+<span class="k">while</span> <span class="ow">not</span> <span class="p">(</span><span class="n">inputs</span><span class="o">.</span><span class="n">is_pressed</span><span class="p">)</span> <span class="p">:</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">outputs</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">Output_1</span><span class="p">)</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">outputs</span><span class="o">.</span><span class="n">off</span><span class="p">(</span><span class="n">Output_1</span><span class="p">)</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="intro.html" class="btn btn-neutral float-left" title="Setup" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="libgpiod.html" class="btn btn-neutral float-right" title="Using libgpiod" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, dictel.io.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+    <!-- Theme Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EJG1VJMZER"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-EJG1VJMZER', {
+          'anonymize_ip': false,
+      });
+    </script> 
+
+</body>
+</html>

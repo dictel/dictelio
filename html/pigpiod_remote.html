@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using pigpiod remotely &mdash; Dictel io1212</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/color.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/dictel_exported.svg"/>
+    <link rel="canonical" href="https://www.dictel.io/io1212/pigpiod_remote.html" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Using pigpiod" href="pigpiod.html" />
+    <!--script async src="https://www.googletagmanager.com/gtag/js?id=G-EJG1VJMZER"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-EJG1VJMZER');
+    </script-->
+     
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html">
+            <img src="_static/dictel_v1.0_exported_white.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html#pinout">Pinout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpio_zero.html">Using GPIO Zero</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libgpiod.html">Using libgpiod</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pigpio.html">Using pigpio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pigpiod.html">Using pigpiod</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Using pigpiod remotely</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Dictel io1212</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <!-- Dictel -->
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="using-pigpiod-remotely">
+<span id="pigpiod-remote"></span><h1>Using pigpiod remotely<a class="headerlink" href="#using-pigpiod-remotely" title="Permalink to this headline"></a></h1>
+<p>The <a class="reference internal" href="pigpiod.html#pigpiod"><span class="std std-ref">Using pigpiod</span></a> does not need to run on the same machine as the client code. If you must run the client application in a computer other than your Raspberry Pi you can:</p>
+<ul class="simple">
+<li><p>Make sure the <code class="docutils literal notranslate"><span class="pre">pigpiod</span></code> daemon is running on the Raspberry Pi.</p></li>
+<li><p>Ensure that Dictel’s io1212 is connected to the GPIO port of the Raspberry Pi.</p></li>
+<li><p>In your client code, when initializing the pigpio library using <code class="docutils literal notranslate"><span class="pre">pigpio_start</span></code>, specify a non-<code class="docutils literal notranslate"><span class="pre">NULL</span></code> address, with the IP address or hostname of the Raspberry Pi.</p></li>
+<li><p>Optionally, specify the port where the daemon is listening.</p></li>
+</ul>
+<p>For example, we can adapt the first pigpiod example (<a class="reference internal" href="pigpiod.html#pigpiod-ex1"><span class="std std-ref">Example 1: Blink</span></a>) to connect to a remote location by changing lines 31-32 as follows:</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">optHost</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;192.168.1.250&quot;</span><span class="p">;</span><span class="w">	</span><span class="c1">// IP address RaspberryPi connected to io1212</span>
+<span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">optPort</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pigpiod.html" class="btn btn-neutral float-left" title="Using pigpiod" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, dictel.io.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+    <!-- Theme Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EJG1VJMZER"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-EJG1VJMZER', {
+          'anonymize_ip': false,
+      });
+    </script> 
+
+</body>
+</html>

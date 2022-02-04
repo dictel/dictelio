@@ -1,0 +1,65 @@
+.. role:: bash(code)
+   :language: bash
+	    
+
+Using GPIO Zero 
+=========================
+
+The following sections show a few basic ways to interface with Dictel's io1212 using the `GPIO Zero <https://gpiozero.readthedocs.io/en/stable/index.html>`_ library in Python.
+
+Installation
+-------------
+
+As seen on GPIO Zero's `installation instructions <https://gpiozero.readthedocs.io/en/stable/installing.html#raspberry-pi>`_, GPIO Zero is available through the apt repositories of Ubuntu, Debian, and Raspberry Pi OS.
+
+Install it by running:
+
+.. code-block:: bash
+		
+     ubuntu@rpi:~$ sudo apt update
+     ubuntu@rpi:~$ sudo apt install python3-gpiozero
+
+
+You can also install the package through Python's ``pip`` command. If you choose to install GPIO Zero inside of a virtual environment, take into account any relevant `development notes <https://gpiozero.readthedocs.io/en/stable/development.html>`_.
+
+.. code-block:: bash
+
+    ubuntu@rpi:~$  sudo pip3 install gpiozero
+
+
+Example 1: Blink
+------------------------
+
+This first example shows how to turn a single output on and off repeatedly using GPIO Zero's ``LED`` class. The output uses relay #0 (connected in pin 4, as shown in :ref:`pinout`).
+
+.. literalinclude:: /tutorial_josep/Exemples/GPIO_Zero_(Python)/io1212-1.py
+
+Example 2: Using LEDBoard
+--------------------------
+
+Expanding on the previous example, the ``LEDBoard`` class can be used to group several outputs together. This example sets up an LED Board with 12 outputs and blinks the first one.
+
+.. literalinclude:: /tutorial_josep/Exemples/GPIO_Zero_(Python)/io1212-2.py
+
+
+Example 3: Naming your outputs
+------------------------------
+
+You can define module-level "constants" naming each of your outputs and later use them to index the LED Board array.
+ 
+.. literalinclude:: /tutorial_josep/Exemples/GPIO_Zero_(Python)/io1212-3.py
+
+		    
+Example 4: Using inputs with Button
+------------------------------------
+
+Similarly, you can use the ``Button`` class to treat an input like a button. Remember to set the ``pull_up`` parameter to ``None``. 
+
+.. literalinclude:: /tutorial_josep/Exemples/GPIO_Zero_(Python)/io1212-5.py
+
+Example 5: Using inputs with ButtonBoard
+-----------------------------------------
+
+Like in the case of ``LEDBoard``, you can use the ``ButtonBoard`` class to group all inputs, and then optionally assign names to each of them.
+
+.. literalinclude:: /tutorial_josep/Exemples/GPIO_Zero_(Python)/io1212-4.py

@@ -1,0 +1,18 @@
+.wy-side-nav-search, .wy-nav-top {
+#    background: #fd6800;
+background: #00a5ff;
+}
+
+.wy-menu-vertical header, .wy-menu-vertical p.caption {
+#    color: #fd6800;
+color: #00a5ff;
+}
+
+#rtd-search-form {
+###    background: #fd6800;
+}
+
+.wy-side-nav-search input[type=text] {
+    #  border-color: #dc5b00;
+      border-color: #00a5ff;
+}

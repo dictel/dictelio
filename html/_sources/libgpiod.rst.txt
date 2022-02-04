@@ -1,0 +1,89 @@
+.. role:: codec(code)
+   :language: C
+	    
+
+.. _libgpiod_usage:
+	      
+Using libgpiod 
+===========================
+
+The `libgpiod <https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/plain/README>`_ library is a straigthforward C API that encapsulates the interaction with Linux's GPIO.
+
+To get started with the library, you can find several excellent resources online. `GPIO Programming: Exploring the libgpiod Library <https://www.ics.com/blog/gpio-programming-exploring-libgpiod-library>`_ can show you a good introduction. For the full documentation, you can check your system's help or `kernel.org's gpiod.h source <https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/tree/include/gpiod.h>`_.
+
+Installation
+-------------
+
+The library is available through the system's repositories in any modern Linux distribution. In ``apt``-based systems, install it by running:
+
+.. code-block:: bash
+		
+     ubuntu@rpi:~$ sudo apt update
+     ubuntu@rpi:~$ sudo apt install libgpiod-dev libgpiod-doc
+
+
+Example 1: Blink
+-----------------
+
+The following example first defines all 12 input and output lines as follows:
+
+
+.. code-block:: C
+		
+ #define NUM_OUTPUTS 12
+ const int output_line_ids[NUM_OUTPUTS] =
+   {4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+
+ #define NUM_INPUTS 12
+ const int input_line_ids[NUM_INPUTS] =
+   {16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27};
+
+
+It then sets the corresponding lines as outputs and inputs, accordingly. To do so, it uses ``libgpiod``'s :codec:`gpiod_chip_get_line()`, :codec:`gpiod_line_request_output_flags()`, and :codec:`gpiod_line_request_input_flags()`.
+
+
+Once everything is set up, the program turns the first output on and off repeatedly. If an LED is connected on the first output, you can expect to see it blink.
+
+
+
+
+
+   
+.. literalinclude:: /tutorial_josep/Exemples/LIBGPIOD/io1212-1.c
+		    :language: C
+
+
+After saving the previous code into a file named ``io1212-1.c``, you can compile and link it using:
+
+.. code-block:: bash
+
+ gcc -o io1212-1 io1212-1.c -lgpiod
+
+
+ 
+Example 2: Using inputs
+------------------------------
+
+The following code reads the value of the first input at a rate of 10 times per second, and sets the first output to the read value every time.
+
+.. code-block:: C
+		
+  // Output_1 io1212 = Input_1 io1212
+  int count = 600;
+  while (count) {
+    int val = gpiod_line_get_value(input_lines[Input_1]);
+    if (val < 0) {
+	perror("Read line input failed");
+	return 1;
+    }
+    int ret = gpiod_line_set_value(output_lines[Output_1], val);
+    if (ret < 0) {
+	perror("Set line output failed");
+	return 1;
+    }
+    usleep(100000);
+    count--;
+  }
+
+You can test it by replacing the "blink" logic in the previous example.
+    

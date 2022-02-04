@@ -1,0 +1,57 @@
+.. _pigpiod:
+
+Using pigpiod 
+=========================
+
+The pigpio library described earlier (see :ref:`pigpio`) can be launched and used as a daemon.
+
+
+Usage
+---------
+
+To launch the daemon, use the following command:
+
+.. code-block:: bash
+
+		ubuntu@rpi:~$ sudo pigpiod
+
+
+To stop the daemon, stop the previous process:
+
+.. code-block:: bash
+
+		ubuntu@rpi:~$ sudo killall pigpiod
+
+		
+To interface with ``pigpiod`` you need to use a different set of functions, declared in ``pigpiod_if2.h``.
+
+
+
+To compile code that interfaces with ``pigpiod``, link with ``libpigpiod_if2`` instead of ``libpigpio``, as follows:
+
+.. code-block:: bash
+
+		gcc -Wall -pthread -o io1212-4 io1212-4.c -lpigpiod_if2 -lrt
+
+.. _pigpiod_ex1:
+
+Example 1: Blink
+----------------
+
+An equivalent to the first example of the non-daemon pigpio library (see :ref:`pigpio_ex1`) can be created by calling the ``pigpiod_if2`` interface instead of ``pigpio``.  
+     
+.. literalinclude:: /tutorial_josep/Exemples/PIGPIOD/io1212-1.c
+		    :language: C
+		    :linenos:
+		    :emphasize-lines: 3, 31,32, 38, 42-53, 55-66, 68-79, 84,86,91
+
+
+Example 2: Using inputs
+------------------------
+
+An example of how to read an input using ``gpio_read()`` can be tested by substituting lines 81-89 above with the following snippet.
+
+.. literalinclude:: /tutorial_josep/Exemples/PIGPIOD/io1212-2.c
+		    :language: C
+		    :lines: 81-92
+

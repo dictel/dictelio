@@ -1,0 +1,112 @@
+
+
+|
+
+.. .. image:: dictel_v1.0_exported.svg
+
+
+.. image:: io1212_v0.9.svg
+  :width: 600
+  :align: center
+
+
+|
+
+.. _dictel_io1212:
+
+.. Dictel io1212 and io1212hq
+
+Introduction
+===========================
+
+
+Dictel's io1212 (and io1212hq) board is a robust input/output accessory board for the Raspberry Pi designed for quality and suitable for industrial applications. It includes 12x relayed outputs as well as 12x opto-coupled inputs.
+
+|
+
+.. figure:: io1212_photos/IMG_0565_io1212hq_no_background.png
+  :width: 600
+  :align: center
+	  
+  Dictel's io1212hq board
+
+
+All input and output lines include an LED to visually indicate whether the line is locically on or off.
+
+Both input and output signals are powered by a source other than the Raspberry Pi. This power must be supplied through pins labeled ``GND`` and ``+5V``. In the case of io1212hq, the power can be optionally supplied through the USB-C port instead.
+
+
+|
+
+.. figure:: io1212_photos/io1212_front.png
+  :width: 600
+  :align: center
+	  
+  Front of the io1212 board
+
+
+
+
+.. figure:: io1212_photos/io1212_back.png
+  :width: 600
+  :align: center
+
+  Back of the io1212 board
+	  
+
+
+.. figure:: io1212_photos/io1212hq_front.png
+  :width: 600
+  :align: center
+
+  Front of the io1212hq board
+
+
+
+
+.. figure:: io1212_photos/io1212hq_back.png
+  :width: 600
+  :align: center
+
+
+  Back of the io1212hq board
+
+|
+
+
+
+
+
+
+
+
+.. increases the complexity of firmware or low-level hardware
+.. imposes protocol overhead that reduces throughput
+.. requires pull-up resistors, which
+.. limit clock speed
+.. consume valuable PCB real estate in extremely space-constrained systems
+.. increase power dissipation
+
+
+
+The following sections include setup instructions and a set of step-by-step usage examples.
+
+
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents
+   :name: index
+
+   self
+   intro.rst
+   gpio_zero.rst
+   libgpiod.rst
+   pigpio.rst
+   pigpiod.rst
+   pigpiod_remote.rst
+
+
+..  openhab.rst
+
+

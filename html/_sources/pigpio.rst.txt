@@ -1,0 +1,76 @@
+.. _pigpio:
+
+Using pigpio 
+=========================
+
+The `pigpio library <http://abyz.me.uk/rpi/pigpio/index.html>`_, which source code can be found in `github <https://github.com/joan2937/pigpio>`_, is another C library specifically built to control the GPIO pins of the Raspberry Pi.
+
+
+Installation
+---------------
+
+As shown on pigpio's `installation instructions <http://abyz.me.uk/rpi/pigpio/download.html>`_, after making sure that ``pigpiod`` is not running, you can download it, compile it, and install it by running the following instructions. Please note that at the time of writing, the latest release is v79:
+
+.. code-block:: bash
+
+  ubuntu@rpi:~$ wget https://github.com/joan2937/pigpio/archive/refs/tags/v79.zip
+  ubuntu@rpi:~$ unzip v79.zip
+  ubuntu@rpi:~$ cd pigpio-79
+  ubuntu@rpi:~/pigpio-79$ make
+  ubuntu@rpi:~/pigpio-79$ sudo make install
+
+
+You can test the installation by running, in the ``pigpio-79`` directory, the following commands:
+
+.. code-block:: bash
+   
+ ubuntu@rpi:~/pigpio-79$ pigpiod -v
+ 79
+
+ ubuntu@rpi:~/pigpio-79$ sudo ./x_pigpio
+ Testing pigpio C I/F
+ [...]
+ TEST  1.1  PASS (set mode, get mode: 0)
+ TEST  1.2  PASS (set pull up down, read: 1)
+ [...]
+ TEST  9.3  PASS (run/stop script/script status: 110)
+ TEST  9.4  PASS (delete script: 0)
+
+
+.. _pigpio_ex1:
+
+Example 1: Blink
+----------------
+
+This first example sets up io1212's inputs and outputs appropriately, and then turns the first output on and off repeatedly. If an LED is connected on the first output, you can expect to see it blink.
+
+.. literalinclude:: /tutorial_josep/Exemples/PIGPIO/io1212-1.c
+		    :language: C
+		    :linenos:
+
+After saving the previous code into a file named ``io1212-1.c``, you can compile and link it using:
+
+.. code-block:: bash
+
+ gcc -Wall -pthread -o io1212-1 io1212-1.c -lpigpio -lrt
+
+
+Example 2: Using inputs
+-------------------------
+
+By substituting lines 75-83 with the following snippet, you can see an example of how to read an input using ``gpioRead()``.
+
+.. literalinclude:: /tutorial_josep/Exemples/PIGPIO/io1212-2.c
+		    :language: C
+		    :lines: 75-86
+
+Example 3: Callback functions
+----------------------------------
+
+The following example shows how pigpio allows the registration of an alert function that will be called when a GPIO pin changes state.
+
+.. literalinclude:: /tutorial_josep/Exemples/PIGPIO/io1212-3.c
+		    :language: C
+		    :linenos:
+		    :emphasize-lines: 33-36,81-87
+

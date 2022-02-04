@@ -1,0 +1,22 @@
+.. _pigpiod_remote:
+
+Using pigpiod remotely
+==================================
+
+The :ref:`pigpiod` does not need to run on the same machine as the client code. If you must run the client application in a computer other than your Raspberry Pi you can:
+
+- Make sure the ``pigpiod`` daemon is running on the Raspberry Pi.
+- Ensure that Dictel's io1212 is connected to the GPIO port of the Raspberry Pi.
+- In your client code, when initializing the pigpio library using ``pigpio_start``, specify a non-``NULL`` address, with the IP address or hostname of the Raspberry Pi.
+- Optionally, specify the port where the daemon is listening.
+
+
+For example, we can adapt the first pigpiod example (:ref:`pigpiod_ex1`) to connect to a remote location by changing lines 31-32 as follows:
+
+
+.. literalinclude:: /tutorial_josep/Exemples/PIGPIOD_REMOTE/io1212-1.c
+		    :language: C
+		    :lines: 31,32
+
+
+
